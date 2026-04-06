@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine</title>
+  <style>
+    :root{
+      --bg1:#ffe9f1;
+      --bg2:#fff7fb;
+      --card:#ffffff;
+      --pink:#ff4f87;
+      --pink-dark:#e83e78;
+      --text:#2d2d2d;
+      --muted:#6e6e6e;
+      --shadow:0 16px 40px rgba(255,79,135,.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,.75), transparent 18%),
+        radial-gradient(circle at 80% 15%, rgba(255,255,255,.6), transparent 18%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    .petal, .confetti {
+      position: fixed;
+      top: -40px;
+      pointer-events: none;
+      opacity: 0.9;
+      animation: fall linear forwards;
+    }
+    .petal{
+      width: 14px; height: 14px;
+      background: rgba(255,105,160,.35);
+      border-radius: 14px 0 14px 0;
+      transform: rotate(45deg);
+      filter: blur(.2px);
+    }
+    .confetti{
+      width: 8px; height: 12px;
+      border-radius: 2px;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0.95;
+      }
+    }
+    .card{
+      position:relative;
+      z-index:2;
+      width:min(760px, 100%);
+      background:rgba(255,255,255,.82);
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      padding:40px 28px 28px;
+      text-align:center;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height:1.05;
+      color:var(--text);
+    }
+    .subtitle{
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    button{
+      border:none;
+      cursor:pointer;
+      padding:13px 28px;
+      font-size:1rem;
+      border-radius:999px;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+    }
+    button:hover{ transform: translateY(-2px); }
+    #yesBtn{
+      background: linear-gradient(180deg, #ff73a1, var(--pink));
+      color:white;
+      font-weight:700;
+      min-width:120px;
+    }
+    #noBtn{
+      background:#fff;
+      color:#555;
+      border:1px solid #f0d6df;
+      min-width:170px;
+    }
+    .message{
+      min-height: 26px;
+      color:#b04a6b;
+      margin-top:16px;
+      font-weight:700;
+    }
+    .result{
+      display:none;
+      margin-top:24px;
+      animation: pop .45s ease;
+    }
+    .result.show{ display:block; }
+    @keyframes pop {
+      0%{ transform: scale(.92); opacity:0; }
+      100%{ transform: scale(1); opacity:1; }
+    }
+    .yay{
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      margin:0;
+      color:var(--text);
+    }
+    .yay-sub{
+      color:var(--muted);
+      margin:8px 0 20px;
+      font-size:1.05rem;
+    }
+    .art-wrap{
+      width:min(420px, 100%);
+      margin:0 auto;
+      background:#fff;
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 16px 30px rgba(0,0,0,.08);
+    }
+    .love-note{
+      margin:16px 0 0;
+      color:#444;
+      font-size:1rem;
+    }
+    .tiny{
+      font-size:.92rem;
+      color:var(--muted);
+    }
+    .heart-top{
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+    .hidden{ display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div id="questionView">
+      <div class="heart-top">💖💞</div>
+      <h1 id="mainTitle">My Love,<br>will you be my Valentine? 💘</h1>
+      <p class="subtitle">Choose wisely. The “No” button is a little shy. 😇</p>
+
+      <div class="buttons">
+        <button id="yesBtn">YES</button>
+        <button id="noBtn">Please don’t do this to me ❤️</button>
+      </div>
+
+      <div class="message" id="message"></div>
+      <p class="tiny">Made with love, extra cuteness, and zero room for rejection 😄</p>
+    </div>
+
+    <div class="result" id="resultView">
+      <p class="yay">💖 YAY!!! 💖</p>
+      <p class="yay-sub">Best decision ever 😘</p>
+
+      <div class="art-wrap">
+        <svg viewBox="0 0 420 360" width="100%" aria-label="Romantic cartoon couple illustration">
+          <defs>
+            <linearGradient id="bgHeart" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffd7e6"/>
+              <stop offset="100%" stop-color="#ffeef6"/>
+            </linearGradient>
+          </defs>
+
+          <circle cx="210" cy="38" r="28" fill="url(#bgHeart)" opacity="0.95"/>
+          <path d="M210 52
+                   C190 33, 164 30, 164 54
+                   C164 77, 210 103, 210 103
+                   C210 103, 256 77, 256 54
+                   C256 30, 230 33, 210 52Z" fill="#f9a7bf"/>
+
+          <!-- Girl -->
+          <circle cx="250" cy="128" r="46" fill="#ffd8c2"/>
+          <path d="M208 122 C212 72, 290 70, 300 126 L296 150 C289 133, 274 125, 263 123 C239 118, 220 126, 212 144 Z" fill="#4c2d26"/>
+          <path d="M284 136 C306 154, 306 190, 286 212 C275 224, 264 228, 258 226 L254 170 Z" fill="#4c2d26"/>
+          <circle cx="236" cy="130" r="4" fill="#3a2a24"/>
+          <circle cx="257" cy="132" r="4" fill="#3a2a24"/>
+          <path d="M241 147 Q248 152 255 147" stroke="#cf7b86" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="227" cy="142" r="7" fill="#ffb3c4" opacity=".6"/>
+          <circle cx="266" cy="145" r="7" fill="#ffb3c4" opacity=".6"/>
+          <path d="M220 176 Q248 165 278 178 L300 258 L210 258 Z" fill="#ffe08a"/>
+
+          <!-- Boy -->
+          <circle cx="162" cy="138" r="44" fill="#ffd8c2"/>
+          <path d="M124 133 C123 85, 193 74, 207 127 L205 149 C196 135, 179 125, 163 123 C145 121, 132 126, 125 136 Z" fill="#5f3a2d"/>
+          <path d="M123 125 C104 136, 98 166, 112 188 C117 196, 124 200, 128 200 Z" fill="#5f3a2d"/>
+          <circle cx="148" cy="140" r="4" fill="#3a2a24"/>
+          <circle cx="169" cy="141" r="4" fill="#3a2a24"/>
+          <path d="M151 157 Q159 163 168 156" stroke="#cf7b86" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="140" cy="152" r="7" fill="#ffb3c4" opacity=".6"/>
+          <circle cx="178" cy="152" r="7" fill="#ffb3c4" opacity=".6"/>
+          <path d="M118 186 Q147 174 184 186 L196 258 L110 258 Z" fill="#d0b28a"/>
+
+          <!-- Hug arms -->
+          <path d="M188 198 Q214 182 234 202" stroke="#ffd8c2" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <path d="M276 194 Q232 176 202 199" stroke="#ffd8c2" stroke-width="18" fill="none" stroke-linecap="round"/>
+
+          <!-- Lower bodies -->
+          <path d="M110 258 L196 258 L184 318 L126 318 Z" fill="#c5a27e"/>
+          <path d="M210 258 L300 258 L287 318 L226 318 Z" fill="#fff0d4"/>
+
+          <!-- Ground shadow -->
+          <ellipse cx="208" cy="328" rx="102" ry="14" fill="#f1d6de"/>
+        </svg>
+      </div>
+      <p class="love-note">I love you ❤️</p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    if (name) {
+      document.getElementById('mainTitle').innerHTML =
+        `${name.replace(/</g,'&lt;').replace(/>/g,'&gt;')},<br>will you be my Valentine? 💘`;
+    }
+
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const msg = document.getElementById('message');
+    const questionView = document.getElementById('questionView');
+    const resultView = document.getElementById('resultView');
+
+    noBtn.addEventListener('click', () => {
+      msg.textContent = "Please don’t do this 😭";
+      noBtn.classList.add('hidden');
+      burstPetals(14);
+    });
+
+    yesBtn.addEventListener('click', () => {
+      questionView.classList.add('hidden');
+      resultView.classList.add('show');
+      burstConfetti(60);
+    });
+
+    function burstPetals(count){
+      for(let i=0; i<count; i++){
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.style.left = (Math.random()*100) + 'vw';
+        p.style.animationDuration = (3 + Math.random()*3) + 's';
+        p.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 6500);
+      }
+    }
+
+    function burstConfetti(count){
+      const colors = ['#ff6fa5','#ffd166','#7bdff2','#b8f2e6','#f7aef8'];
+      for(let i=0; i<count; i++){
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = (Math.random()*100) + 'vw';
+        c.style.background = colors[Math.floor(Math.random()*colors.length)];
+        c.style.animationDuration = (3 + Math.random()*2.5) + 's';
+        c.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }
+    }
+
+    // Soft floating petals in background
+    setInterval(() => burstPetals(3), 1800);
+  </script>
+</body>
+</html>
